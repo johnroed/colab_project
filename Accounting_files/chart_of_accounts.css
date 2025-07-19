@@ -1,0 +1,80 @@
+.main-content {
+    color: #222;
+    margin-left: 260px;
+    position: relative;
+    z-index: 1;
+    padding: 32px;
+}
+.section-title-box {
+    display: inline-block;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(25, 118, 210, 0.06);
+    padding: 12px 36px 12px 28px;
+}
+.section-title {
+    display: inline-flex;
+    align-items: center;
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 0 24px 0;
+    padding: 8px 22px 8px 16px;
+    background: none;
+    color: #1976d2;
+    border-radius: 8px;
+    box-shadow: none;
+    box-sizing: border-box;
+}
+.section-title i {
+    margin-right: 12px;
+}
+.add-button {
+    display: inline-flex;
+    align-items: center;
+    padding: 12px 28px;
+    background-color: #1976d2;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(25, 118, 210, 0.10);
+    transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
+    gap: 10px;
+}
+
+.add-button:hover {
+    background-color: #1565c0;
+    box-shadow: 0 4px 16px rgba(25, 118, 210, 0.18);
+    transform: translateY(-2px) scale(1.03);
+}
+
+.add-button i {
+    margin-right: 10px;
+    font-size: 20px;
+}
+
+.action-buttons {
+    margin: 20px 0;
+    padding: 0 20px;
+}
+
+.close-modal, #closeAddAccountModal, #closeChartOfAccountsModal {
+    color: #1976d2;
+    position: absolute;
+    top: 12px;
+    right: 18px;
+    font-size: 2.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    background: none;
+    border: none;
+    outline: none;
+    z-index: 10;
+    transition: color 0.2s, transform 0.2s;
+}
+.close-modal:hover, #closeAddAccountModal:hover, #closeChartOfAccountsModal:hover {
+    color: #e53935;
+    transform: scale(1.18);
+} 

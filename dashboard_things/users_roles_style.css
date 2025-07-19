@@ -1,0 +1,296 @@
+.section-title-box {
+    display: inline-block;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(25, 118, 210, 0.06);
+    padding: 12px 36px 12px 28px;
+}
+.section-title {
+    display: inline-flex;
+    align-items: center;
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 0 24px 0;
+    padding: 8px 22px 8px 16px;
+    background: none;
+    color: #1976d2;
+    border-radius: 8px;
+    box-shadow: none;
+    box-sizing: border-box;
+}
+.section-title i {
+    margin-right: 12px;
+}
+
+.action-buttons {
+    margin: 20px 0;
+    padding: 0 20px;
+}
+
+.add-button {
+    display: inline-flex;
+    align-items: center;
+    padding: 12px 28px;
+    background-color: #1976d2;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(25, 118, 210, 0.10);
+    transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
+    gap: 10px;
+}
+
+.add-button:hover {
+    background-color: #1565c0;
+    box-shadow: 0 4px 16px rgba(25, 118, 210, 0.18);
+    transform: translateY(-2px) scale(1.03);
+}
+
+.add-button i {
+    margin-right: 10px;
+    font-size: 20px;
+}
+
+/* Modal Styles */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(25, 118, 210, 0.10);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(25, 118, 210, 0.18);
+    padding: 36px 28px 24px 28px;
+    min-width: 540px;
+    max-width: 700px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.close-modal, #closeAddUserRoleModal {
+    color: #1976d2;
+    position: absolute;
+    top: 12px;
+    right: 18px;
+    font-size: 2.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    background: none;
+    border: none;
+    outline: none;
+    z-index: 10;
+    transition: color 0.2s, transform 0.2s;
+}
+.close-modal:hover, #closeAddUserRoleModal:hover {
+    color: #e53935;
+    transform: scale(1.18);
+}
+
+.add-employee-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px 24px;
+}
+
+.form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.form-row label {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #1976d2;
+    margin-bottom: 2px;
+}
+
+.form-row input,
+.form-row select {
+    padding: 8px 12px;
+    border: 1px solid #b6c6e3;
+    border-radius: 6px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+.form-row input:focus,
+.form-row select:focus {
+    border-color: #1976d2;
+}
+
+.form-row.form-actions {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: center;
+    margin-top: 18px;
+}
+
+.form-row.form-actions .add-button {
+    width: fit-content;
+    min-width: unset;
+    max-width: 100%;
+    flex: 0 0 auto;
+    align-self: center;
+    padding-left: 32px;
+    padding-right: 32px;
+    margin: 0 auto;
+}
+
+.modal-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+    gap: 18px;
+    flex-wrap: nowrap;
+    width: 100%;
+    position: relative;
+}
+
+.modal-header-row h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1976d2;
+    flex-shrink: 0;
+}
+
+.modal-header-row .add-button {
+    flex-shrink: 0;
+    white-space: nowrap;
+    margin-left: auto;
+}
+
+.modal-header-row .close-modal {
+    margin-left: auto;
+    position: static;
+    font-size: 1.6rem;
+    color: #1976d2;
+    cursor: pointer;
+    font-weight: bold;
+    transition: color 0.2s;
+}
+
+@media (max-width: 600px) {
+    .modal-header-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+    .modal-header-row h2 {
+        text-align: center;
+    }
+}
+
+@media (max-width: 900px) {
+    .modal-content {
+        min-width: 90vw;
+        max-width: 98vw;
+        padding: 18px 8px 14px 8px;
+    }
+    .add-employee-form {
+        grid-template-columns: 1fr;
+    }
+} 
+
+.employee-table-container {
+    margin-top: 40px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 12px rgba(25, 118, 210, 0.08), 0 1.5px 4px rgba(0,0,0,0.04);
+    padding: 24px 18px 18px 18px;
+}
+.employee-table-title {
+    margin: 0 0 18px 0;
+    color: #1976d2;
+    font-weight: 600;
+    font-size: 1.35rem;
+    letter-spacing: 0.5px;
+}
+.employee-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    table-layout: fixed;
+}
+.employee-table th,
+.employee-table td {
+    vertical-align: middle;
+    padding: 14px 14px;
+    line-height: 1.4;
+}
+.employee-table th {
+    background: #1976d2;
+    color: #fff;
+    padding: 14px 14px;
+    font-weight: 600;
+    border: none;
+}
+.employee-table td {
+    padding: 14px 14px;
+    border-bottom: 1px solid #e3e8ee;
+    font-size: 1.04rem;
+    background: #fff;
+}
+.employee-table tr:last-child td {
+    border-bottom: none;
+}
+.employee-table tr {
+    transition: background 0.18s;
+}
+.employee-table tbody tr:hover {
+    background: #f0f6ff;
+}
+.employee-action-btn {
+    padding: 6px 16px;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.98rem;
+    cursor: pointer;
+    margin-right: 6px;
+    transition: background 0.18s, box-shadow 0.18s;
+}
+.employee-edit-btn {
+    background: #43a047;
+    color: #fff;
+}
+.employee-edit-btn:hover {
+    background: #388e3c;
+}
+.employee-delete-btn {
+    background: #d32f2f;
+    color: #fff;
+}
+.employee-delete-btn:hover {
+    background: #b71c1c;
+} 
+
+.employee-table th:nth-child(1), .employee-table td:nth-child(1),
+.employee-table th:nth-child(2), .employee-table td:nth-child(2),
+.employee-table th:nth-child(3), .employee-table td:nth-child(3),
+.employee-table th:nth-child(4), .employee-table td:nth-child(4) {
+    text-align: left;
+}
+.employee-table th:nth-child(5), .employee-table td:nth-child(5),
+.employee-table th:nth-child(6), .employee-table td:nth-child(6),
+.employee-table th:nth-child(7), .employee-table td:nth-child(7) {
+    text-align: center;
+} 

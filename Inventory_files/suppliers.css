@@ -1,0 +1,318 @@
+.main-content {
+    color: #222;
+    margin-left: 260px;
+    position: relative;
+    z-index: 1;
+    padding: 32px;
+}
+.section-title-box {
+    display: inline-block;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(25, 118, 210, 0.06);
+    padding: 12px 36px 12px 28px;
+}
+.section-title {
+    display: inline-flex;
+    align-items: center;
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 0 24px 0;
+    padding: 8px 22px 8px 16px;
+    background: none;
+    color: #1976d2;
+    border-radius: 8px;
+    box-shadow: none;
+    box-sizing: border-box;
+}
+.section-title i {
+    margin-right: 12px;
+}
+.action-buttons {
+    margin: 20px 0;
+    padding: 0 20px;
+}
+.add-button {
+    display: inline-flex;
+    align-items: center;
+    padding: 12px 28px;
+    background-color: #1976d2;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(25, 118, 210, 0.10);
+    transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
+    gap: 10px;
+}
+
+.add-button:hover {
+    background-color: #1565c0;
+    box-shadow: 0 4px 16px rgba(25, 118, 210, 0.18);
+    transform: translateY(-2px) scale(1.03);
+}
+
+.add-button i {
+    margin-right: 10px;
+    font-size: 20px;
+}
+
+.success-message {
+    background: #e8f5e8;
+    color: #388e3c;
+    padding: 12px 20px;
+    border-radius: 6px;
+    margin: 20px;
+    font-weight: 600;
+    border-left: 4px solid #388e3c;
+}
+
+.modal-overlay {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(25, 118, 210, 0.10);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(25, 118, 210, 0.18);
+    padding: 36px 28px 24px 28px;
+    min-width: 340px;
+    max-width: 500px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.close-modal {
+    position: absolute;
+    top: 12px;
+    right: 18px;
+    font-size: 2.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    background: none;
+    border: none;
+    outline: none;
+    z-index: 10;
+    transition: color 0.2s, transform 0.2s;
+    color: #1976d2;
+}
+
+.close-modal:hover {
+    color: #e53935;
+    transform: scale(1.18);
+}
+
+.modal-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.modal-header-row h2 {
+    margin: 0;
+    color: #1976d2;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.form-row label {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #1976d2;
+    margin-bottom: 2px;
+}
+
+.form-row input,
+.form-row select,
+.form-row textarea {
+    padding: 8px 12px;
+    border: 1px solid #b6c6e3;
+    border-radius: 6px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.form-row input:focus,
+.form-row select:focus,
+.form-row textarea:focus {
+    border-color: #1976d2;
+}
+
+.form-row textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.form-row.form-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 8px;
+}
+
+.form-row.form-actions .add-button {
+    width: fit-content;
+    min-width: unset;
+    max-width: 100%;
+    flex: 0 0 auto;
+    align-self: center;
+    padding-left: 32px;
+    padding-right: 32px;
+    margin: 0 auto;
+}
+
+.suppliers-table-container {
+    margin-top: 40px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 12px rgba(25, 118, 210, 0.08), 0 1.5px 4px rgba(0,0,0,0.04);
+    padding: 24px 18px 18px 18px;
+}
+
+.suppliers-table-title {
+    margin: 0 0 18px 0;
+    color: #1976d2;
+    font-weight: 600;
+    font-size: 1.35rem;
+    letter-spacing: 0.5px;
+}
+
+.suppliers-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    table-layout: fixed;
+}
+
+.suppliers-table th,
+.suppliers-table td {
+    vertical-align: middle;
+    padding: 12px 10px;
+    line-height: 1.4;
+}
+
+.suppliers-table th {
+    background: #1976d2;
+    color: #fff;
+    font-weight: 600;
+    border: none;
+    text-align: left;
+}
+
+.suppliers-table td {
+    border-bottom: 1px solid #e3e8ee;
+    font-size: 1.04rem;
+    background: #fff;
+    text-align: left;
+}
+
+.suppliers-table tr:last-child td {
+    border-bottom: none;
+}
+
+.suppliers-table tr {
+    transition: background 0.18s;
+}
+
+.suppliers-table tbody tr:hover {
+    background: #f0f6ff;
+}
+
+.suppliers-table td:last-child, .suppliers-table th:last-child {
+    text-align: center;
+}
+
+.edit-supplier-btn, .delete-supplier-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 16px;
+    font-size: 1rem;
+    font-weight: 500;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin: 0 4px;
+    transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+    box-shadow: 0 1.5px 4px rgba(25,118,210,0.08);
+}
+
+.edit-supplier-btn {
+    background: #1976d2;
+    color: #fff;
+}
+
+.edit-supplier-btn:hover {
+    background: #1565c0;
+    color: #fff;
+}
+
+.delete-supplier-btn {
+    background: #fff0f0;
+    color: #d32f2f;
+    border: 1px solid #d32f2f;
+}
+
+.delete-supplier-btn:hover {
+    background: #d32f2f;
+    color: #fff;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-active {
+    background: #e8f5e8;
+    color: #388e3c;
+}
+
+.status-inactive {
+    background: #ffebee;
+    color: #d32f2f;
+}
+
+@media (max-width: 900px) {
+    .modal-content {
+        max-width: 95vw;
+        margin: 20px;
+    }
+    
+    .suppliers-table {
+        font-size: 0.9rem;
+    }
+    
+    .suppliers-table th,
+    .suppliers-table td {
+        padding: 8px 6px;
+    }
+} 
