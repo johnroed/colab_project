@@ -238,7 +238,7 @@ if ($result) {
             <?php if (count($employees) > 0): ?>
                 <?php foreach ($employees as $emp): ?>
                     <div class="employee-card">
-                        <img class="employee-photo" src="<?= $emp['photo'] ? 'Payroll_files/' . htmlspecialchars($emp['photo']) : 'https://ui-avatars.com/api/?name=' . urlencode($emp['first_name'] . ' ' . $emp['last_name']) . '&background=1976d2&color=fff' ?>" alt="Employee Photo">
+                        <img class="employee-card-img" src="<?= $emp['photo'] ? 'Payroll_files/' . htmlspecialchars($emp['photo']) : 'https://ui-avatars.com/api/?name=' . urlencode($emp['first_name'] . ' ' . $emp['last_name']) . '&background=1976d2&color=fff' ?>" alt="Employee Photo">
                         <div class="employee-info">
                             <div class="employee-name"><?= htmlspecialchars($emp['first_name'] . ' ' . $emp['last_name']) ?></div>
                             <div class="employee-job"><?= htmlspecialchars($emp['job_title']) ?></div>
