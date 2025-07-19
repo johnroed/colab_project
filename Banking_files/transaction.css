@@ -27,4 +27,158 @@
 }
 .section-title i {
     margin-right: 12px;
+}
+.transactions-table-container {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(25, 118, 210, 0.08);
+    padding: 28px 18px 18px 18px;
+    margin-top: 32px;
+    margin-bottom: 32px;
+}
+.transactions-table-title {
+    margin: 0 0 18px 0;
+    color: #1976d2;
+    font-weight: 600;
+    font-size: 1.35rem;
+    letter-spacing: 0.5px;
+}
+.transactions-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: #fff;
+    font-size: 1.04rem;
+    box-shadow: none;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 0;
+}
+.transactions-table th {
+    background: #1976d2;
+    color: #fff;
+    font-weight: 600;
+    padding: 14px 10px;
+    border: none;
+    text-align: left;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+.transactions-table td {
+    padding: 12px 10px;
+    border-bottom: 1px solid #e3e8ee;
+    background: #fff;
+    vertical-align: middle;
+    transition: background 0.18s;
+}
+.transactions-table tr:nth-child(even) td {
+    background: #f8fafd;
+}
+.transactions-table tr:hover td {
+    background: #f0f6ff;
+}
+.transactions-table td .type-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 16px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #fff;
+}
+.type-badge.deposit { background: #43a047; }
+.type-badge.withdrawal { background: #c62828; }
+.type-badge.transfer_in { background: #1976d2; }
+.type-badge.transfer_out { background: #ffa000; color: #fff; }
+.type-badge.fee { background: #6d4c41; }
+.type-badge.interest { background: #388e3c; }
+.type-badge.adjustment { background: #7b1fa2; }
+.transactions-table td .type-badge i {
+    font-size: 1rem;
+    margin-right: 4px;
+}
+.transactions-filter-bar {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 1px 6px rgba(25,118,210,0.07);
+    padding: 18px 18px 8px 18px;
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    margin-bottom: 24px;
+    margin-top: 24px;
+}
+.transactions-filter-bar label {
+    color: #1976d2;
+    font-weight: 500;
+    font-size: 1rem;
+    margin-bottom: 2px;
+}
+.transactions-filter-bar select,
+.transactions-filter-bar input[type="date"] {
+    padding: 10px 14px;
+    border-radius: 6px;
+    border: 1px solid #b6c6e3;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    background: #f8fafd;
+    color: #222;
+    min-width: 140px;
+    box-shadow: none;
+}
+.transactions-filter-bar select:focus,
+.transactions-filter-bar input[type="date"]:focus {
+    border-color: #1976d2;
+    box-shadow: 0 0 0 2px rgba(25,118,210,0.10);
+}
+.transactions-filter-bar button[type="submit"] {
+    padding: 12px 32px;
+    background-color: #1976d2;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(25, 118, 210, 0.10);
+    transition: background-color 0.2s, box-shadow 0.2s, transform 0.1s;
+    margin-top: 18px;
+}
+.transactions-filter-bar button[type="submit"]:hover {
+    background-color: #1565c0;
+    box-shadow: 0 4px 16px rgba(25, 118, 210, 0.18);
+    transform: translateY(-2px) scale(1.03);
+}
+@media (max-width: 900px) {
+    .transactions-table-container {
+        padding: 10px 2px 8px 2px;
+    }
+    .transactions-table th, .transactions-table td {
+        padding: 8px 4px;
+        font-size: 0.98rem;
+    }
+    .transactions-table-title {
+        font-size: 1.1rem;
+    }
+    .transactions-filter-bar {
+        padding: 10px 2px 8px 2px;
+        gap: 10px;
+    }
+    .transactions-filter-bar label {
+        font-size: 0.98rem;
+    }
+    .transactions-filter-bar select,
+    .transactions-filter-bar input[type="date"] {
+        font-size: 0.98rem;
+        min-width: 100px;
+        padding: 8px 8px;
+    }
+    .transactions-filter-bar button[type="submit"] {
+        padding: 10px 18px;
+        font-size: 0.98rem;
+    }
 } 

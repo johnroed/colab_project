@@ -4,32 +4,33 @@ include '../includes_files/connection.php';
 // Handle Add Account
 if (isset($_POST['account_name']) && isset($_POST['account_type']) && isset($_POST['initial_balance'])) {
     $account_name = trim($_POST['account_name']);
-    $account_number = isset($_POST['account_number']) ? trim($_POST['account_number']) : null;
     $account_type = trim($_POST['account_type']);
     $initial_balance = floatval($_POST['initial_balance']);
     $description = isset($_POST['description']) ? trim($_POST['description']) : null;
-    
-    // Check if account number already exists (if provided)
-    if ($account_number) {
-        $check_stmt = $conn->prepare("SELECT id FROM bank_accounts WHERE account_number = ?");
-        $check_stmt->bind_param("s", $account_number);
-        $check_stmt->execute();
-        $check_stmt->store_result();
-        if ($check_stmt->num_rows > 0) {
-            header('Location: bank_account_form.php?error=Account number already exists');
-            exit;
-        }
-        $check_stmt->close();
+
+    // Generate a unique random account number
+    function generateUniqueAccountNumber($conn) {
+        do {
+            $account_number = 'ACCT-' . mt_rand(10000000, 99999999);
+            $check_stmt = $conn->prepare("SELECT id FROM bank_accounts WHERE account_number = ?");
+            $check_stmt->bind_param("s", $account_number);
+            $check_stmt->execute();
+            $check_stmt->store_result();
+            $exists = $check_stmt->num_rows > 0;
+            $check_stmt->close();
+        } while ($exists);
+        return $account_number;
     }
-    
+    $account_number = generateUniqueAccountNumber($conn);
+
     // Insert new account
     $stmt = $conn->prepare("INSERT INTO bank_accounts (account_name, account_number, account_type, initial_balance, current_balance, description) VALUES (?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("sssdd", $account_name, $account_number, $account_type, $initial_balance, $initial_balance, $description);
-    
+    $stmt->bind_param("sssdds", $account_name, $account_number, $account_type, $initial_balance, $initial_balance, $description);
+
     if ($stmt->execute()) {
         $account_id = $stmt->insert_id;
         $stmt->close();
-        
+
         // Create initial deposit transaction
         if ($initial_balance > 0) {
             $ref_number = 'INIT-' . str_pad($account_id, 3, '0', STR_PAD_LEFT);
@@ -38,7 +39,7 @@ if (isset($_POST['account_name']) && isset($_POST['account_type']) && isset($_PO
             $transaction_stmt->execute();
             $transaction_stmt->close();
         }
-        
+
         header('Location: bank_account_form.php?success=Account created successfully');
     } else {
         header('Location: bank_account_form.php?error=Failed to create account');
@@ -50,25 +51,11 @@ if (isset($_POST['account_name']) && isset($_POST['account_type']) && isset($_PO
 if (isset($_POST['edit_account_id']) && isset($_POST['edit_account_name'])) {
     $account_id = intval($_POST['edit_account_id']);
     $account_name = trim($_POST['edit_account_name']);
-    $account_number = isset($_POST['edit_account_number']) ? trim($_POST['edit_account_number']) : null;
     $account_type = trim($_POST['edit_account_type']);
     $description = isset($_POST['edit_description']) ? trim($_POST['edit_description']) : null;
     
-    // Check if account number already exists (if changed)
-    if ($account_number) {
-        $check_stmt = $conn->prepare("SELECT id FROM bank_accounts WHERE account_number = ? AND id != ?");
-        $check_stmt->bind_param("si", $account_number, $account_id);
-        $check_stmt->execute();
-        $check_stmt->store_result();
-        if ($check_stmt->num_rows > 0) {
-            header('Location: bank_account_form.php?error=Account number already exists');
-            exit;
-        }
-        $check_stmt->close();
-    }
-    
-    $stmt = $conn->prepare("UPDATE bank_accounts SET account_name=?, account_number=?, account_type=?, description=? WHERE id=?");
-    $stmt->bind_param("ssssi", $account_name, $account_number, $account_type, $description, $account_id);
+    $stmt = $conn->prepare("UPDATE bank_accounts SET account_name=?, account_type=?, description=? WHERE id=?");
+    $stmt->bind_param("sssi", $account_name, $account_type, $description, $account_id);
     $stmt->execute();
     $stmt->close();
     

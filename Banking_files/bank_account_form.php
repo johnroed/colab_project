@@ -90,10 +90,6 @@ foreach ($accounts as $account) {
                         <input type="text" id="account_name" name="account_name" required>
                     </div>
                     <div class="form-row">
-                        <label for="account_number">Account Number</label>
-                        <input type="text" id="account_number" name="account_number">
-                    </div>
-                    <div class="form-row">
                         <label for="account_type">Account Type</label>
                         <select id="account_type" name="account_type" required>
                             <option value="">Select Type</option>
@@ -171,6 +167,40 @@ foreach ($accounts as $account) {
                     </div>
                     <div class="form-row form-actions">
                         <button type="submit" class="add-button">Process Transaction</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Edit Account Modal -->
+        <div id="editAccountModal" class="modal-overlay">
+            <div class="modal-content">
+                <div class="modal-header-row">
+                    <h2>Edit Bank Account</h2>
+                </div>
+                <span class="close-modal" id="closeEditAccountModal">&times;</span>
+                <form class="edit-account-form" method="POST" action="bank_account.php">
+                    <input type="hidden" id="edit_account_id" name="edit_account_id">
+                    <div class="form-row">
+                        <label for="edit_account_name">Account Name</label>
+                        <input type="text" id="edit_account_name" name="edit_account_name" required>
+                    </div>
+                    <div class="form-row">
+                        <label for="edit_account_type">Account Type</label>
+                        <select id="edit_account_type" name="edit_account_type" required>
+                            <option value="">Select Type</option>
+                            <option value="checking">Checking</option>
+                            <option value="savings">Savings</option>
+                            <option value="business">Business</option>
+                            <option value="investment">Investment</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <label for="edit_description">Description</label>
+                        <textarea id="edit_description" name="edit_description" rows="3"></textarea>
+                    </div>
+                    <div class="form-row form-actions">
+                        <button type="submit" class="add-button">Save Changes</button>
                     </div>
                 </form>
             </div>
@@ -283,11 +313,20 @@ foreach ($accounts as $account) {
     .message-close:hover {
         opacity: 1;
     }
+    .section-title-box {
+        display: inline-block;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 1px 4px rgba(25, 118, 210, 0.06);
+        padding: 12px 36px 12px 28px;
+        margin-bottom: 28px;
+    }
     .bank-summary {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        display: flex;
+        flex-wrap: wrap;
         gap: 20px;
         margin-bottom: 30px;
+        margin-top: 18px;
     }
     .summary-card {
         background: #fff;
@@ -297,6 +336,8 @@ foreach ($accounts as $account) {
         display: flex;
         align-items: center;
         gap: 16px;
+        flex: 1; /* Allow cards to grow and shrink */
+        min-width: 250px; /* Ensure minimum width */
     }
     .summary-icon {
         width: 60px;
@@ -878,6 +919,32 @@ foreach ($accounts as $account) {
             });
             
             container.innerHTML = html;
+        }
+
+        // Edit Account Modal functionality
+        const editAccountBtns = document.querySelectorAll('.edit-account');
+        const editAccountModal = document.getElementById('editAccountModal');
+        const closeEditAccountBtn = document.getElementById('closeEditAccountModal');
+        if (editAccountBtns && editAccountModal) {
+            editAccountBtns.forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    const accountId = btn.getAttribute('data-account-id');
+                    // Find the account data from PHP-rendered JS object
+                    const account = <?php echo json_encode($accounts); ?>.find(acc => acc.id == accountId);
+                    if (account) {
+                        document.getElementById('edit_account_id').value = account.id;
+                        document.getElementById('edit_account_name').value = account.account_name;
+                        document.getElementById('edit_account_type').value = account.account_type;
+                        document.getElementById('edit_description').value = account.description || '';
+                        editAccountModal.style.display = 'flex';
+                    }
+                });
+            });
+        }
+        if (closeEditAccountBtn && editAccountModal) {
+            closeEditAccountBtn.onclick = function() {
+                editAccountModal.style.display = 'none';
+            };
         }
     });
     

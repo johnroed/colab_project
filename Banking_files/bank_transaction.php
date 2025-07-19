@@ -70,7 +70,7 @@ if (isset($_POST['bank_account_id']) && isset($_POST['transaction_type']) && iss
         
         // Insert transaction record
         $transaction_stmt = $conn->prepare("INSERT INTO bank_transactions (bank_account_id, transaction_type, amount, balance_before, balance_after, description, reference_number, category, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $transaction_stmt->bind_param("isddssss", $bank_account_id, $transaction_type, $amount, $balance_before, $balance_after, $description, $ref_number, $category, $notes);
+        $transaction_stmt->bind_param("isddsssss", $bank_account_id, $transaction_type, $amount, $balance_before, $balance_after, $description, $ref_number, $category, $notes);
         $transaction_stmt->execute();
         $transaction_id = $conn->insert_id;
         $transaction_stmt->close();

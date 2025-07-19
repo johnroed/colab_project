@@ -214,83 +214,249 @@
 .employee-table-container {
     margin-top: 40px;
     background: #fff;
-    border-radius: 10px;
-    box-shadow: 0 2px 12px rgba(25, 118, 210, 0.08), 0 1.5px 4px rgba(0,0,0,0.04);
-    padding: 24px 18px 18px 18px;
+    border-radius: 14px;
+    box-shadow: 0 4px 24px rgba(25, 118, 210, 0.10), 0 1.5px 4px rgba(0,0,0,0.04);
+    padding: 32px 20px 24px 20px;
+    overflow-x: auto;
 }
 .employee-table-title {
-    margin: 0 0 18px 0;
+    margin: 0 0 22px 0;
     color: #1976d2;
-    font-weight: 600;
-    font-size: 1.35rem;
+    font-weight: 700;
+    font-size: 1.5rem;
     letter-spacing: 0.5px;
 }
 .employee-table {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
     background: #fff;
-    table-layout: fixed;
+    table-layout: auto;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(25, 118, 210, 0.06);
 }
-.employee-table th,
-.employee-table td {
-    vertical-align: middle;
-    padding: 14px 14px;
-    line-height: 1.4;
-}
-.employee-table th {
+.employee-table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
     background: #1976d2;
     color: #fff;
-    padding: 14px 14px;
-    font-weight: 600;
+    font-weight: 700;
+    font-size: 1.08rem;
+    padding: 18px 16px;
     border: none;
+    letter-spacing: 0.03em;
+    box-shadow: 0 2px 6px rgba(25, 118, 210, 0.08);
+}
+.employee-table th:first-child {
+    border-top-left-radius: 12px;
+}
+.employee-table th:last-child {
+    border-top-right-radius: 12px;
 }
 .employee-table td {
-    padding: 14px 14px;
-    border-bottom: 1px solid #e3e8ee;
-    font-size: 1.04rem;
+    padding: 18px 16px;
+    border-bottom: 1.5px solid #e3e8ee;
+    font-size: 1.08rem;
     background: #fff;
+    transition: background 0.18s;
 }
 .employee-table tr:last-child td {
     border-bottom: none;
 }
-.employee-table tr {
-    transition: background 0.18s;
+.employee-table tbody tr {
+    transition: background 0.18s, box-shadow 0.18s;
 }
 .employee-table tbody tr:hover {
     background: #f0f6ff;
+    box-shadow: 0 2px 8px rgba(25, 118, 210, 0.08);
 }
-.employee-action-btn {
-    padding: 6px 16px;
-    border: none;
-    border-radius: 4px;
-    font-size: 0.98rem;
-    cursor: pointer;
-    margin-right: 6px;
-    transition: background 0.18s, box-shadow 0.18s;
-}
-.employee-edit-btn {
-    background: #43a047;
-    color: #fff;
-}
-.employee-edit-btn:hover {
-    background: #388e3c;
-}
-.employee-delete-btn {
-    background: #d32f2f;
-    color: #fff;
-}
-.employee-delete-btn:hover {
-    background: #b71c1c;
-} 
-
-.employee-table th:nth-child(1), .employee-table td:nth-child(1),
-.employee-table th:nth-child(2), .employee-table td:nth-child(2),
-.employee-table th:nth-child(3), .employee-table td:nth-child(3),
-.employee-table th:nth-child(4), .employee-table td:nth-child(4) {
+.employee-table td, .employee-table th {
     text-align: left;
 }
-.employee-table th:nth-child(5), .employee-table td:nth-child(5),
-.employee-table th:nth-child(6), .employee-table td:nth-child(6),
-.employee-table th:nth-child(7), .employee-table td:nth-child(7) {
+.employee-table td:last-child, .employee-table th:last-child {
     text-align: center;
+}
+.actions-btn {
+    background: #1976d2;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 22px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+    box-shadow: 0 1.5px 4px rgba(25,118,210,0.10);
+    letter-spacing: 0.5px;
+    margin: 0 2px;
+}
+.actions-btn:hover {
+    background: #1565c0;
+    color: #fff;
+}
+.actions-dropdown {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    min-width: 170px;
+    background: #fff;
+    box-shadow: 0 8px 32px rgba(25,118,210,0.18);
+    border-radius: 12px;
+    overflow: hidden;
+    max-height: 160px;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    z-index: 10;
+    border: 1.5px solid #e3e8ee;
+    margin-top: 8px;
+    padding: 0;
+}
+.actions-dropdown button {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    border: none;
+    background: none;
+    color: #1976d2;
+    padding: 18px 22px 18px 20px;
+    text-align: left;
+    font-size: 1.08rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+    outline: none;
+    border-radius: 0;
+}
+.actions-dropdown button:not(:last-child) {
+    border-bottom: 1.5px solid #e3e8ee;
+}
+.actions-dropdown button:hover, .actions-dropdown button:focus {
+    background: #f0f6ff;
+    color: #1565c0;
+}
+.actions-dropdown .delete-account-btn {
+    color: #d32f2f;
+}
+.actions-dropdown .delete-account-btn:hover, .actions-dropdown .delete-account-btn:focus {
+    background: #fff0f0;
+    color: #b71c1c;
+}
+.actions-dropdown .fa-solid {
+    font-size: 1.1em;
+    min-width: 20px;
+    text-align: center;
+}
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 52px;
+    height: 28px;
+    vertical-align: middle;
+}
+.switch input {display:none;}
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #d32f2f;
+    transition: .4s;
+    border-radius: 28px;
+}
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 22px;
+    width: 22px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+    box-shadow: 0 1px 4px rgba(25,118,210,0.10);
+}
+input:checked + .slider {
+    background-color: #43a047;
+}
+input:checked + .slider:before {
+    transform: translateX(24px);
+}
+@media (max-width: 900px) {
+    .employee-table-container {
+        padding: 10px 2px 8px 2px;
+    }
+    .employee-table th, .employee-table td {
+        padding: 10px 6px;
+        font-size: 0.98rem;
+    }
+    .employee-table-title {
+        font-size: 1.1rem;
+    }
+}
+@media (max-width: 700px) {
+    .employee-table-container {
+        padding: 4px 0 4px 0;
+    }
+    .employee-table {
+        font-size: 0.95rem;
+        min-width: 600px;
+    }
+    .employee-table-title {
+        font-size: 1rem;
+    }
+    .employee-table thead th, .employee-table td {
+        padding: 8px 4px;
+    }
+} 
+
+.delete-modal {
+    min-width: 320px;
+    max-width: 400px;
+    width: 100%;
+    padding: 32px 24px 24px 24px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+}
+.delete-modal .modal-header-row {
+    margin-bottom: 10px;
+    justify-content: center;
+}
+.delete-modal .modal-header-row h2 {
+    color: #d32f2f;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin: 0;
+}
+.delete-modal .delete-icon {
+    color: #d32f2f;
+    font-size: 2.2rem;
+    margin-right: 10px;
+}
+.delete-modal .delete-modal-body {
+    text-align: center;
+    margin-bottom: 18px;
+}
+.delete-modal .delete-user-label {
+    color: #888;
+    font-size: 1rem;
+}
+.delete-modal .delete-user-email-row {
+    margin-bottom: 0;
+}
+.delete-modal .form-row.form-actions {
+    gap: 12px;
+    justify-content: center;
+}
+@media (max-width: 500px) {
+    .delete-modal {
+        min-width: 90vw;
+        max-width: 98vw;
+        padding: 18px 6px 14px 6px;
+    }
 } 

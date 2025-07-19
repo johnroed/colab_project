@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 19, 2025 at 10:21 AM
+-- Generation Time: Jul 19, 2025 at 07:38 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -47,8 +47,7 @@ CREATE TABLE `bank_accounts` (
 
 INSERT INTO `bank_accounts` (`id`, `account_name`, `account_number`, `account_type`, `initial_balance`, `current_balance`, `currency`, `description`, `status`, `created_at`, `updated_at`) VALUES
 (1, 'Main Business Account', 'BA001', 'business', 100000.00, 100000.00, 'PHP', 'Primary business operating account', 'active', '2025-07-19 08:21:39', '2025-07-19 08:21:39'),
-(2, 'Savings Account', 'BA002', 'savings', 50000.00, 50000.00, 'PHP', 'Business savings for emergencies', 'active', '2025-07-19 08:21:39', '2025-07-19 08:21:39'),
-(3, 'Investment Account', 'BA003', 'investment', 25000.00, 25000.00, 'PHP', 'Account for business investments', 'active', '2025-07-19 08:21:39', '2025-07-19 08:21:39');
+(2, 'Savings Account', 'BA002', 'savings', 50000.00, 30000.00, 'PHP', 'Business savings for emergencies', 'active', '2025-07-19 08:21:39', '2025-07-19 11:51:04');
 
 -- --------------------------------------------------------
 
@@ -81,7 +80,8 @@ CREATE TABLE `bank_transactions` (
 INSERT INTO `bank_transactions` (`id`, `bank_account_id`, `transaction_type`, `amount`, `balance_before`, `balance_after`, `description`, `reference_number`, `transaction_date`, `category`, `notes`, `user_id`, `related_transaction_id`, `status`, `created_at`) VALUES
 (1, 1, 'deposit', 100000.00, 0.00, 100000.00, 'Initial deposit for Main Business Account', 'INIT-001', '2025-07-19 16:21:39', 'Initial Setup', NULL, NULL, NULL, 'completed', '2025-07-19 08:21:39'),
 (2, 2, 'deposit', 50000.00, 0.00, 50000.00, 'Initial deposit for Savings Account', 'INIT-002', '2025-07-19 16:21:39', 'Initial Setup', NULL, NULL, NULL, 'completed', '2025-07-19 08:21:39'),
-(3, 3, 'deposit', 25000.00, 0.00, 25000.00, 'Initial deposit for Investment Account', 'INIT-003', '2025-07-19 16:21:39', 'Initial Setup', NULL, NULL, NULL, 'completed', '2025-07-19 08:21:39');
+(4, 2, 'deposit', 20000.00, 50000.00, 70000.00, 'Emergency', 'TXN-20250719-3944', '2025-07-19 19:50:20', 'Expenses', '', NULL, NULL, 'completed', '2025-07-19 11:50:20'),
+(5, 2, 'withdrawal', 40000.00, 70000.00, 30000.00, 'Emergency', 'TXN-20250719-0029', '2025-07-19 19:51:04', 'Expenses', '', NULL, NULL, 'completed', '2025-07-19 11:51:04');
 
 -- --------------------------------------------------------
 
@@ -125,39 +125,6 @@ CREATE TABLE `customers` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `employee_info`
---
-
-CREATE TABLE `employee_info` (
-  `employee_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `first_name` varchar(100) NOT NULL,
-  `last_name` varchar(100) NOT NULL,
-  `department` varchar(100) DEFAULT NULL,
-  `date_hired` date NOT NULL DEFAULT curdate(),
-  `status` varchar(20) DEFAULT 'active',
-  `birthday` date DEFAULT NULL,
-  `gender` varchar(20) DEFAULT NULL,
-  `civil_status` varchar(20) DEFAULT NULL,
-  `highest_education` varchar(255) DEFAULT NULL,
-  `nationality` varchar(100) DEFAULT NULL,
-  `phone_number` varchar(20) DEFAULT NULL,
-  `emergency_contact_name` varchar(100) DEFAULT NULL,
-  `emergency_contact_number` varchar(20) DEFAULT NULL,
-  `address` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `employee_info`
---
-
-INSERT INTO `employee_info` (`employee_id`, `user_id`, `first_name`, `last_name`, `department`, `date_hired`, `status`, `birthday`, `gender`, `civil_status`, `highest_education`, `nationality`, `phone_number`, `emergency_contact_name`, `emergency_contact_number`, `address`) VALUES
-(4, 6, 'Maria Lourdes', 'Garcia', 'General Services', '2025-07-19', 'active', '2002-03-03', 'female', 'single', 'Bachelor of Science in Information Technology', 'Filipino', '0928-456-7890', 'Antonio Reyes', '(02) 555-7890', '456 Mabini Street, Barangay San Isidro, Pasig City, Philippines'),
-(5, 7, 'MARK', 'REYES', 'Operations', '2025-07-19', 'active', '2000-06-10', 'male', 'single', 'Bachelor of Science in Computer Engineering', 'Filipino', '0918-765-4321', 'Antonio Reyes', '(02) 555-7890', '789 Katipunan Avenue, Barangay Loyola Heights, Quezon City, Philippines');
 
 -- --------------------------------------------------------
 
@@ -232,6 +199,30 @@ INSERT INTO `login_approvals` (`approval_id`, `user_id`, `token`, `status`, `cre
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `payroll_employees`
+--
+
+CREATE TABLE `payroll_employees` (
+  `id` int(11) NOT NULL,
+  `first_name` varchar(100) NOT NULL,
+  `last_name` varchar(100) NOT NULL,
+  `department` varchar(100) DEFAULT NULL,
+  `job_title` varchar(100) DEFAULT NULL,
+  `email` varchar(150) DEFAULT NULL,
+  `phone_number` varchar(30) DEFAULT NULL,
+  `date_hired` date DEFAULT NULL,
+  `status` enum('active','inactive','terminated') DEFAULT 'active',
+  `photo_path` varchar(255) DEFAULT NULL,
+  `address` varchar(255) DEFAULT NULL,
+  `birthday` date DEFAULT NULL,
+  `gender` varchar(20) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `stock_movements`
 --
 
@@ -286,7 +277,6 @@ CREATE TABLE `user_login` (
   `user_id` int(11) NOT NULL,
   `email_address` varchar(255) NOT NULL,
   `password_secret` varchar(255) NOT NULL,
-  `email_confirmed` tinyint(1) NOT NULL DEFAULT 0,
   `phone_number` varchar(20) DEFAULT NULL,
   `phone_confirmed` tinyint(1) NOT NULL DEFAULT 0,
   `two_step_on` tinyint(1) NOT NULL DEFAULT 0,
@@ -305,10 +295,11 @@ CREATE TABLE `user_login` (
 -- Dumping data for table `user_login`
 --
 
-INSERT INTO `user_login` (`user_id`, `email_address`, `password_secret`, `email_confirmed`, `phone_number`, `phone_confirmed`, `two_step_on`, `date_joined`, `last_update`, `failed_attempts`, `last_failed_attempt`, `status`, `reset_code`, `reset_code_expiry`, `reset_code_used`, `job_title`) VALUES
-(1, 'johnroedlahaylahay2231@gmail.com', '$2y$10$6jubjsS.Z0YuSqkk8oyx9eE5hZhhRq3zjsgOuF8ibHklLxN6H6.PG', 1, '09637330408', 1, 0, '2025-07-17 19:21:42', '2025-07-19 14:30:01', 1, '2025-07-19 08:07:46', 'active', NULL, NULL, 1, NULL),
-(6, 'maria.garcia@email.com', '$2y$10$hkaad0ctdiunlVKz9VBf3urZ6KXGVgVYnK8TrZI.8VPJteNaV/Ulq', 0, NULL, 0, 0, '2025-07-19 02:26:07', '2025-07-19 02:26:07', 0, NULL, 'active', NULL, NULL, 0, 'workers'),
-(7, 'mark.reyes@email.com', '$2y$10$QR7dEFHoK31lvF1YuYkjiuX7ON0kyzoAzwvwzVo/8FvQ6zY.cI5Vm', 0, NULL, 0, 0, '2025-07-19 02:30:43', '2025-07-19 02:30:43', 0, NULL, 'active', NULL, NULL, 0, 'middle_manager');
+INSERT INTO `user_login` (`user_id`, `email_address`, `password_secret`, `phone_number`, `phone_confirmed`, `two_step_on`, `date_joined`, `last_update`, `failed_attempts`, `last_failed_attempt`, `status`, `reset_code`, `reset_code_expiry`, `reset_code_used`, `job_title`) VALUES
+(1, 'johnroedlahaylahay2231@gmail.com', '$2y$10$kUrep2ZagwPcGibYskV2rusIxnq44KSn2nE5sca2hab.7yOvn6IKu', '09637330408', 1, 0, '2025-07-17 19:21:42', '2025-07-20 01:21:51', 1, '2025-07-19 16:27:34', 'active', NULL, NULL, 1, 'Executive'),
+(6, 'maria.garcia@email.com', '$2y$10$hkaad0ctdiunlVKz9VBf3urZ6KXGVgVYnK8TrZI.8VPJteNaV/Ulq', NULL, 0, 0, '2025-07-19 02:26:07', '2025-07-20 01:19:26', 0, NULL, 'active', NULL, NULL, 0, 'workers'),
+(7, 'mark.reyes@email.com', '$2y$10$QR7dEFHoK31lvF1YuYkjiuX7ON0kyzoAzwvwzVo/8FvQ6zY.cI5Vm', NULL, 0, 0, '2025-07-19 02:30:43', '2025-07-20 01:19:25', 0, NULL, 'active', NULL, NULL, 0, 'middle_manager'),
+(8, 'henricoresula27@gmail.com', '$2y$10$ea7GNVwIkx8DRk4PTkCBNe3OvuEnS8V4RILXBpp2FF7q6L1uZFpMm', NULL, 0, 0, '2025-07-19 21:21:47', '2025-07-20 01:19:25', 1, '2025-07-19 15:25:55', 'active', NULL, NULL, 0, 'workers');
 
 --
 -- Indexes for dumped tables
@@ -344,13 +335,6 @@ ALTER TABLE `customers`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `employee_info`
---
-ALTER TABLE `employee_info`
-  ADD PRIMARY KEY (`employee_id`),
-  ADD KEY `user_id` (`user_id`);
-
---
 -- Indexes for table `inventory_images`
 --
 ALTER TABLE `inventory_images`
@@ -369,6 +353,12 @@ ALTER TABLE `inventory_items`
 ALTER TABLE `login_approvals`
   ADD PRIMARY KEY (`approval_id`),
   ADD KEY `user_id` (`user_id`);
+
+--
+-- Indexes for table `payroll_employees`
+--
+ALTER TABLE `payroll_employees`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `stock_movements`
@@ -406,7 +396,7 @@ ALTER TABLE `bank_accounts`
 -- AUTO_INCREMENT for table `bank_transactions`
 --
 ALTER TABLE `bank_transactions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `chart_of_accounts`
@@ -419,12 +409,6 @@ ALTER TABLE `chart_of_accounts`
 --
 ALTER TABLE `customers`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `employee_info`
---
-ALTER TABLE `employee_info`
-  MODIFY `employee_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `inventory_images`
@@ -442,7 +426,13 @@ ALTER TABLE `inventory_items`
 -- AUTO_INCREMENT for table `login_approvals`
 --
 ALTER TABLE `login_approvals`
-  MODIFY `approval_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `approval_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+
+--
+-- AUTO_INCREMENT for table `payroll_employees`
+--
+ALTER TABLE `payroll_employees`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `stock_movements`
@@ -460,7 +450,7 @@ ALTER TABLE `suppliers`
 -- AUTO_INCREMENT for table `user_login`
 --
 ALTER TABLE `user_login`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- Constraints for dumped tables
@@ -473,12 +463,6 @@ ALTER TABLE `bank_transactions`
   ADD CONSTRAINT `bank_transactions_ibfk_1` FOREIGN KEY (`bank_account_id`) REFERENCES `bank_accounts` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `bank_transactions_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user_login` (`user_id`) ON DELETE SET NULL,
   ADD CONSTRAINT `bank_transactions_ibfk_3` FOREIGN KEY (`related_transaction_id`) REFERENCES `bank_transactions` (`id`) ON DELETE SET NULL;
-
---
--- Constraints for table `employee_info`
---
-ALTER TABLE `employee_info`
-  ADD CONSTRAINT `employee_info_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user_login` (`user_id`);
 
 --
 -- Constraints for table `inventory_images`

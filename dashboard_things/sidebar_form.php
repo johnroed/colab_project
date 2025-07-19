@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <link rel="stylesheet" href="/colab_project/dashboard_things/sidebar_style.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 <div class="sidebar">
@@ -48,19 +51,57 @@
             <a class="sidebar-link" href="/colab_project/Payroll_files/employees_form.php"><i class="fa-solid fa-user-tie"></i> Employees</a>
             <a class="sidebar-link" href="/colab_project/Payroll_files/pay_slips_form.php"><i class="fa-solid fa-file-invoice"></i> Pay Slips</a>
         </div>
-        <button class="sidebar-category"><i class="fa-solid fa-cogs"></i> Management & Settings <span class="sidebar-chevron"><i class="fa-solid fa-chevron-left"></i></span></button>
-        <div class="sidebar-dropdown">
-            <a class="sidebar-link" href="/colab_project/dashboard_things/user_roles_form.php"><i class="fa-solid fa-users-cog"></i> Users & Roles</a>
-            <a class="sidebar-link" href="/colab_project/Management_Settings_files/company_settings_form.php"><i class="fa-solid fa-building"></i> Company Settings</a>
-            <a class="sidebar-link" href="/colab_project/Management_Settings_files/tax_management_form.php"><i class="fa-solid fa-percent"></i> Tax Management</a>
-            <a class="sidebar-link" href="/colab_project/Management_Settings_files/import_export_form.php"><i class="fa-solid fa-file-import"></i> Import/Export</a>
-            <a class="sidebar-link" href="/colab_project/Management_Settings_files/audit_log_form.php"><i class="fa-solid fa-clipboard-list"></i> Audit Log</a>
-            <a class="sidebar-link" href="/colab_project/Management_Settings_files/attachments_form.php"><i class="fa-solid fa-paperclip"></i> Attachments</a>
-            <a class="sidebar-link" href="/colab_project/Management_Settings_files/notifications_form.php"><i class="fa-solid fa-bell"></i> Notifications</a>
-        </div>
+        <?php if (isset($_SESSION['job_title']) && strtolower($_SESSION['job_title']) === 'workers'): ?>
+            <button class="sidebar-category sidebar-disabled" disabled style="cursor:not-allowed; position:relative;">
+                <i class="fa-solid fa-cogs"></i> Management & Settings
+                <span class="sidebar-chevron"><i class="fa-solid fa-lock"></i></span>
+                <span class="sidebar-tooltip">Your account is not authorized to access this part</span>
+            </button>
+        <?php else: ?>
+            <button class="sidebar-category"><i class="fa-solid fa-cogs"></i> Management & Settings <span class="sidebar-chevron"><i class="fa-solid fa-chevron-left"></i></span></button>
+            <div class="sidebar-dropdown">
+                <a class="sidebar-link" href="/colab_project/dashboard_things/user_roles_form.php"><i class="fa-solid fa-users-cog"></i> Users & Roles</a>
+                <a class="sidebar-link" href="/colab_project/Management_Settings_files/company_settings_form.php"><i class="fa-solid fa-building"></i> Company Settings</a>
+                <a class="sidebar-link" href="/colab_project/Management_Settings_files/tax_management_form.php"><i class="fa-solid fa-percent"></i> Tax Management</a>
+                <a class="sidebar-link" href="/colab_project/Management_Settings_files/import_export_form.php"><i class="fa-solid fa-file-import"></i> Import/Export</a>
+                <a class="sidebar-link" href="/colab_project/Management_Settings_files/audit_log_form.php"><i class="fa-solid fa-clipboard-list"></i> Audit Log</a>
+                <a class="sidebar-link" href="/colab_project/Management_Settings_files/attachments_form.php"><i class="fa-solid fa-paperclip"></i> Attachments</a>
+                <a class="sidebar-link" href="/colab_project/Management_Settings_files/notifications_form.php"><i class="fa-solid fa-bell"></i> Notifications</a>
+            </div>
+        <?php endif; ?>
     </div>
     <a href="/colab_project/logout.php" class="sidebar-logout-btn">Logout</a>
 </div>
+<style>
+.sidebar-disabled {
+    background: rgba(255,255,255,0.04) !important;
+    color: #bdbdbd !important;
+    pointer-events: none;
+    opacity: 0.7;
+}
+.sidebar-disabled .fa-lock {
+    color: #bdbdbd;
+}
+.sidebar-disabled .sidebar-tooltip {
+    display: none;
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #222;
+    color: #fff;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    white-space: nowrap;
+    z-index: 9999;
+    margin-left: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+.sidebar-disabled:hover .sidebar-tooltip {
+    display: block;
+}
+</style>
 <script>
     // Sidebar dropdown logic
     const categories = document.querySelectorAll('.sidebar-category');

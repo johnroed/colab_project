@@ -8,7 +8,7 @@ if (isset($_POST['user_login_id']) && isset($_POST['password_secret'])) {
     $login_input = trim($_POST['user_login_id']);
     $user_password = $_POST['password_secret'];
     if ($login_input !== '') {
-        $find_user = $conn->prepare('SELECT user_id, email_address, phone_number, password_secret, job_title, status, failed_attempts, last_failed_attempt, email_confirmed FROM user_login WHERE email_address = ? OR phone_number = ? LIMIT 1');
+        $find_user = $conn->prepare('SELECT user_id, email_address, phone_number, password_secret, job_title, status, failed_attempts, last_failed_attempt FROM user_login WHERE email_address = ? OR phone_number = ? LIMIT 1');
         $find_user->bind_param('ss', $login_input, $login_input);
         $find_user->execute();
         $result = $find_user->get_result();
