@@ -50,6 +50,7 @@ if ($result) {
         height: 90px;
         border-radius: 50%;
         object-fit: cover;
+        object-position: top;
         background: #f0f0f0;
         margin-bottom: 16px;
         border: 2px solid #e3e8ee;
