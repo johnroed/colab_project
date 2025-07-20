@@ -23,109 +23,7 @@ if ($result) {
     <!-- PDF.js and Mammoth.js for resume parsing -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.2.0/mammoth.browser.min.js"></script>
-    <style>
-    .employee-card-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-        gap: 24px;
-        margin-top: 32px;
-    }
-    .employee-card {
-        background: #fff;
-        border-radius: 12px;
-        box-shadow: 0 2px 12px rgba(25, 118, 210, 0.08);
-        padding: 24px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        transition: transform 0.2s, box-shadow 0.2s;
-        position: relative;
-    }
-    .employee-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 8px 24px rgba(25, 118, 210, 0.15);
-    }
-    .employee-photo {
-        width: 90px;
-        height: 90px;
-        border-radius: 50%;
-        object-fit: cover;
-        background: #f0f0f0;
-        margin-bottom: 16px;
-        border: 2px solid #e3e8ee;
-    }
-    .employee-info {
-        text-align: center;
-        margin-bottom: 12px;
-    }
-    .employee-name {
-        font-size: 1.2rem;
-        font-weight: 600;
-        color: #1976d2;
-        margin-bottom: 2px;
-    }
-    .employee-job {
-        font-size: 1rem;
-        color: #333;
-        margin-bottom: 2px;
-    }
-    .employee-dept {
-        font-size: 0.98rem;
-        color: #666;
-        margin-bottom: 2px;
-    }
-    .employee-email {
-        font-size: 0.97rem;
-        color: #888;
-        margin-bottom: 6px;
-    }
-    .employee-status {
-        display: inline-block;
-        padding: 4px 14px;
-        border-radius: 16px;
-        font-size: 0.95rem;
-        font-weight: 500;
-        margin-bottom: 8px;
-    }
-    .status-active { background: #e8f5e8; color: #2e7d32; border: 1px solid #4caf50; }
-    .status-inactive { background: #ffebee; color: #c62828; border: 1px solid #f44336; }
-    .employee-card-actions {
-        display: flex;
-        gap: 10px;
-        justify-content: center;
-        margin-top: 8px;
-    }
-    .employee-card-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 8px 16px;
-        font-size: 0.98rem;
-        font-weight: 500;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        transition: background 0.18s, color 0.18s;
-    }
-    .employee-edit-btn { background: #1976d2; color: #fff; }
-    .employee-edit-btn:hover { background: #1565c0; }
-    .employee-delete-btn { background: #fff0f0; color: #d32f2f; border: 1px solid #d32f2f; }
-    .employee-delete-btn:hover { background: #d32f2f; color: #fff; }
-    .photo-upload-preview {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin-bottom: 10px;
-    }
-    .photo-upload-preview img {
-        width: 80px;
-        height: 80px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 2px solid #e3e8ee;
-        margin-bottom: 6px;
-    }
-    </style>
+    <link rel="stylesheet" href="employees.css">
 </head>
 <body>
     <div class="main-content">
@@ -142,7 +40,7 @@ if ($result) {
             <div class="modal-content">
                 <div class="modal-header-row">
                     <h2>Add New Employee</h2>
-                    <button type="button" class="add-button" id="uploadResumeBtn">
+                    <button type="button" class="add-button" id="uploadResumeBtn" style="margin-left:-12px;">
                         <i class="fa-solid fa-upload"></i> Upload Resume
                     </button>
                     <input type="file" id="resumeInput" accept=".pdf,.docx" style="display:none;" />
@@ -150,8 +48,9 @@ if ($result) {
                 <span class="close-modal" id="closeAddEmployeeModal">&times;</span>
                 <form class="add-employee-form" method="POST" action="save_payroll_employee.php" enctype="multipart/form-data">
                     <div class="photo-upload-preview" id="photoPreviewContainer">
-                        <img id="photoPreview" src="https://ui-avatars.com/api/?name=Employee&background=1976d2&color=fff" alt="Employee Photo Preview">
-                        <input type="file" id="photoInput" name="photo" accept="image/*" style="margin-top:6px;">
+                        <button type="button" id="uploadPhotoBtn" class="upload-btn">Upload Photo</button>
+                        <input type="file" id="photoInput" name="photo" accept="image/*" style="display:none;">
+                        <span id="selectedPhotoName" style="font-size:0.98rem; color:#1976d2; margin-left:8px;"></span>
                     </div>
                     <div class="form-row">
                         <label for="first_name">First Name</label>
@@ -237,18 +136,42 @@ if ($result) {
         <div class="employee-card-grid">
             <?php if (count($employees) > 0): ?>
                 <?php foreach ($employees as $emp): ?>
+                    <?php
+                    // Calculate age from birthday
+                    $age = '';
+                    if (!empty($emp['birthday'])) {
+                        $birthday = new DateTime($emp['birthday']);
+                        $today = new DateTime();
+                        $age = $today->diff($birthday)->y;
+                    }
+                    ?>
                     <div class="employee-card">
-                        <img class="employee-card-img" src="<?= $emp['photo'] ? 'Payroll_files/' . htmlspecialchars($emp['photo']) : 'https://ui-avatars.com/api/?name=' . urlencode($emp['first_name'] . ' ' . $emp['last_name']) . '&background=1976d2&color=fff' ?>" alt="Employee Photo">
-                        <div class="employee-info">
-                            <div class="employee-name"><?= htmlspecialchars($emp['first_name'] . ' ' . $emp['last_name']) ?></div>
-                            <div class="employee-job"><?= htmlspecialchars($emp['job_title']) ?></div>
-                            <div class="employee-dept"><?= htmlspecialchars($emp['department']) ?></div>
-                            <div class="employee-email"><?= htmlspecialchars($emp['email']) ?></div>
-                            <span class="employee-status status-<?= htmlspecialchars($emp['status']) ?>"><?= ucfirst(htmlspecialchars($emp['status'])) ?></span>
+                        <div class="employee-card-top">
+                            <img class="employee-photo" src="<?= $emp['photo'] ? htmlspecialchars($emp['photo']) : 'https://ui-avatars.com/api/?name=' . urlencode($emp['first_name'] . ' ' . $emp['last_name']) . '&background=1976d2&color=fff&size=200' ?>" alt="Employee Photo">
                         </div>
-                        <div class="employee-card-actions">
-                            <button class="employee-card-btn employee-edit-btn"><i class="fa-solid fa-pen"></i> Edit</button>
-                            <button class="employee-card-btn employee-delete-btn"><i class="fa-solid fa-trash"></i> Delete</button>
+                        <div class="employee-card-bottom">
+                            <div class="employee-name">
+                                <i class="fa-solid fa-user"></i>
+                                <?= htmlspecialchars($emp['first_name'] . ' ' . $emp['last_name']) ?>
+                            </div>
+                            <div class="employee-age">
+                                <i class="fa-solid fa-birthday-cake"></i>
+                                <?= $age ? $age . ' years old' : 'Age not available' ?>
+                            </div>
+                            <div class="employee-department">
+                                <i class="fa-solid fa-building"></i>
+                                <?= htmlspecialchars($emp['department'] ?? 'Department not set') ?>
+                            </div>
+                            <div class="employee-card-actions">
+                                <button class="employee-btn details-btn" onclick="viewEmployeeDetails(<?= $emp['id'] ?>)">
+                                    <i class="fa-solid fa-eye"></i>
+                                    Details
+                                </button>
+                                <button class="employee-btn fire-btn" onclick="fireEmployee(<?= $emp['id'] ?>)">
+                                    <i class="fa-solid fa-fire"></i>
+                                    Fire
+                                </button>
+                            </div>
                         </div>
                     </div>
                 <?php endforeach; ?>
@@ -256,6 +179,181 @@ if ($result) {
                 <div style="grid-column: 1/-1; text-align:center; color:#3a6073; font-size:1.1rem;">No employees found.</div>
             <?php endif; ?>
         </div>
+        
+        <!-- Fire Employee Modal -->
+        <div id="fireEmployeeModal" class="modal-overlay">
+            <div class="modal-content fire-employee-modal">
+                <div class="modal-header">
+                    <h2>Fire Employee</h2>
+                    <span class="close-modal" id="closeFireEmployeeModal">&times;</span>
+                </div>
+                <form class="fire-employee-form" id="fireEmployeeForm">
+                    <div class="fire-employee-content">
+                        <div class="employee-info-section">
+                            <h4><i class="fa-solid fa-user"></i> Employee Information</h4>
+                            <div class="employee-info-grid">
+                                <div class="info-item">
+                                    <label>Employee ID:</label>
+                                    <input type="text" id="fireEmployeeId" name="employee_id" readonly>
+                                </div>
+                                <div class="info-item">
+                                    <label>Full Name:</label>
+                                    <input type="text" id="fireEmployeeName" name="employee_name" readonly>
+                                </div>
+                                <div class="info-item">
+                                    <label>Department:</label>
+                                    <input type="text" id="fireEmployeeDepartment" name="department" readonly>
+                                </div>
+                                <div class="info-item">
+                                    <label>Job Title:</label>
+                                    <input type="text" id="fireEmployeeJobTitle" name="job_title" readonly>
+                                </div>
+                                <div class="info-item">
+                                    <label>Date Hired:</label>
+                                    <input type="text" id="fireEmployeeDateHired" name="date_hired" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="termination-section">
+                            <h4><i class="fa-solid fa-exclamation-triangle"></i> Termination Details</h4>
+                            <div class="termination-form">
+                                <div class="form-row">
+                                    <label for="date_fired">Date Fired:</label>
+                                    <input type="date" id="date_fired" name="date_fired" required>
+                                </div>
+                                <div class="form-row">
+                                    <label for="reason">Reason for Termination:</label>
+                                    <textarea id="reason" name="reason" rows="4" required placeholder="Please provide a detailed reason for termination..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="fire-employee-actions">
+                        <button type="button" class="employee-btn details-btn" id="cancelFireEmployee">
+                            <i class="fa-solid fa-times"></i> Cancel
+                        </button>
+                        <button type="submit" class="employee-btn fire-btn">
+                            <i class="fa-solid fa-fire"></i> Confirm Termination
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Employee Details Modal -->
+        <div id="employeeDetailsModal" class="modal-overlay">
+            <div class="modal-content employee-details-modal">
+                <div class="modal-header">
+                    <h2 id="employeeDetailsTitle">Employee Details</h2>
+                </div>
+                <div class="employee-details-content">
+                    <div class="employee-details-left">
+                        <div class="employee-photo-container">
+                            <img id="employeeDetailsPhoto" src="" alt="Employee Photo" class="employee-details-photo">
+                            <div class="employee-status-badge" id="employeeStatusBadge"></div>
+                        </div>
+                        <div class="employee-basic-info">
+                            <h3 id="employeeDetailsName">Employee Name</h3>
+                            <p id="employeeDetailsJobTitle" class="job-title">Job Title</p>
+                            <p id="employeeDetailsDepartment" class="department">Department</p>
+                        </div>
+                        <div class="employee-details-actions">
+                            <button class="employee-btn edit-btn" id="editEmployeeFromDetails">
+                                <i class="fa-solid fa-pen"></i> Edit Employee
+                            </button>
+                            <button class="employee-btn details-btn" id="closeEmployeeDetails">
+                                <i class="fa-solid fa-times"></i> Close
+                            </button>
+                        </div>
+                    </div>
+                    <div class="employee-details-right">
+                        <div class="details-section">
+                            <h4><i class="fa-solid fa-user"></i> Personal Information</h4>
+                            <div class="details-grid">
+                                <div class="detail-item">
+                                    <span class="detail-label">Full Name:</span>
+                                    <span class="detail-value" id="detailFullName">-</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Age:</span>
+                                    <span class="detail-value" id="detailAge">-</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Gender:</span>
+                                    <span class="detail-value" id="detailGender">-</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Birthday:</span>
+                                    <span class="detail-value" id="detailBirthday">-</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Address:</span>
+                                    <span class="detail-value" id="detailAddress">-</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="details-section">
+                            <h4><i class="fa-solid fa-briefcase"></i> Employment Information</h4>
+                            <div class="details-grid">
+                                <div class="detail-item">
+                                    <span class="detail-label">Job Title:</span>
+                                    <span class="detail-value" id="detailJobTitle">-</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Department:</span>
+                                    <span class="detail-value" id="detailDepartment">-</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Date Hired:</span>
+                                    <span class="detail-value" id="detailDateHired">-</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Years of Service:</span>
+                                    <span class="detail-value" id="detailYearsOfService">-</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Status:</span>
+                                    <span class="detail-value" id="detailStatus">-</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="details-section">
+                            <h4><i class="fa-solid fa-address-book"></i> Contact Information</h4>
+                            <div class="details-grid">
+                                <div class="detail-item">
+                                    <span class="detail-label">Email:</span>
+                                    <span class="detail-value" id="detailEmail">-</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Phone Number:</span>
+                                    <span class="detail-value" id="detailPhone">-</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="details-section">
+                            <h4><i class="fa-solid fa-clock"></i> System Information</h4>
+                            <div class="details-grid">
+                                <div class="detail-item">
+                                    <span class="detail-label">Created:</span>
+                                    <span class="detail-value" id="detailCreated">-</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Last Updated:</span>
+                                    <span class="detail-value" id="detailUpdated">-</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+        
         <div id="loadingModal" class="modal-overlay" style="display:none; z-index:2000; background:rgba(255,255,255,0.8);">
             <div class="modal-content" style="min-width:300px; max-width:400px; text-align:center; align-items:center; justify-content:center;">
                 <div style="margin: 30px auto;">
@@ -273,6 +371,112 @@ if ($result) {
         }
         </style>
         <script>
+        // Employee action functions
+        async function viewEmployeeDetails(employeeId) {
+            try {
+                // Show loading state
+                const modal = document.getElementById('employeeDetailsModal');
+                const loadingModal = document.getElementById('loadingModal');
+                if (loadingModal) loadingModal.style.display = 'flex';
+                
+                // Fetch employee details
+                const response = await fetch(`get_employee_details.php?id=${employeeId}`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch employee details');
+                }
+                
+                const employee = await response.json();
+                
+                // Populate modal with employee data
+                document.getElementById('employeeDetailsTitle').textContent = `Employee Details - ${employee.full_name}`;
+                document.getElementById('employeeDetailsName').textContent = employee.full_name;
+                document.getElementById('employeeDetailsJobTitle').textContent = employee.job_title;
+                document.getElementById('employeeDetailsDepartment').textContent = employee.department;
+                
+                // Set photo
+                const photoElement = document.getElementById('employeeDetailsPhoto');
+                if (employee.photo_path) {
+                    photoElement.src = employee.photo_path;
+                } else {
+                    photoElement.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(employee.full_name)}&background=1976d2&color=fff&size=300`;
+                }
+                
+                // Set status badge
+                const statusBadge = document.getElementById('employeeStatusBadge');
+                statusBadge.textContent = employee.status.charAt(0).toUpperCase() + employee.status.slice(1);
+                statusBadge.className = `employee-status-badge status-${employee.status}`;
+                
+                // Populate details
+                document.getElementById('detailFullName').textContent = employee.full_name;
+                document.getElementById('detailAge').textContent = employee.age;
+                document.getElementById('detailGender').textContent = employee.gender;
+                document.getElementById('detailBirthday').textContent = employee.birthday;
+                document.getElementById('detailAddress').textContent = employee.address;
+                document.getElementById('detailJobTitle').textContent = employee.job_title;
+                document.getElementById('detailDepartment').textContent = employee.department;
+                document.getElementById('detailDateHired').textContent = employee.date_hired;
+                document.getElementById('detailYearsOfService').textContent = employee.years_of_service;
+                document.getElementById('detailStatus').textContent = employee.status.charAt(0).toUpperCase() + employee.status.slice(1);
+                document.getElementById('detailEmail').textContent = employee.email;
+                document.getElementById('detailPhone').textContent = employee.phone_number;
+                document.getElementById('detailCreated').textContent = employee.created_at;
+                document.getElementById('detailUpdated').textContent = employee.updated_at;
+                
+                // Store employee ID for edit functionality
+                document.getElementById('editEmployeeFromDetails').setAttribute('data-employee-id', employee.id);
+                
+                // Show modal
+                if (modal) modal.style.display = 'flex';
+                
+            } catch (error) {
+                console.error('Error fetching employee details:', error);
+                alert('Failed to load employee details. Please try again.');
+            } finally {
+                // Hide loading modal
+                const loadingModal = document.getElementById('loadingModal');
+                if (loadingModal) loadingModal.style.display = 'none';
+            }
+        }
+        
+        async function fireEmployee(employeeId) {
+            try {
+                // Show loading state
+                const loadingModal = document.getElementById('loadingModal');
+                if (loadingModal) loadingModal.style.display = 'flex';
+                
+                // Fetch employee details
+                const response = await fetch(`get_employee_details.php?id=${employeeId}`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch employee details');
+                }
+                
+                const employee = await response.json();
+                
+                // Populate fire employee modal with employee data
+                document.getElementById('fireEmployeeId').value = employee.id;
+                document.getElementById('fireEmployeeName').value = employee.full_name;
+                document.getElementById('fireEmployeeDepartment').value = employee.department;
+                document.getElementById('fireEmployeeJobTitle').value = employee.job_title;
+                document.getElementById('fireEmployeeDateHired').value = employee.date_hired;
+                
+                // Set today's date as default for date fired
+                const today = new Date().toISOString().split('T')[0];
+                document.getElementById('date_fired').value = today;
+                
+                // Show modal
+                const fireModal = document.getElementById('fireEmployeeModal');
+                if (fireModal) fireModal.style.display = 'flex';
+                
+            } catch (error) {
+                console.error('Error fetching employee details:', error);
+                alert('Failed to load employee details. Please try again.');
+            } finally {
+                // Hide loading modal
+                const loadingModal = document.getElementById('loadingModal');
+                if (loadingModal) loadingModal.style.display = 'none';
+            }
+        }
+        
         document.addEventListener('DOMContentLoaded', function() {
             // Modal open/close logic
             const openBtn = document.getElementById('openAddEmployeeModal');
@@ -487,29 +691,111 @@ if ($result) {
             }
             // Photo upload preview
             const photoInput = document.getElementById('photoInput');
-            const photoPreview = document.getElementById('photoPreview');
-            if (photoInput && photoPreview) {
-                photoInput.addEventListener('change', function(e) {
-                    const file = e.target.files[0];
-                    if (file) {
-                        const reader = new FileReader();
-                        reader.onload = function(ev) {
-                            photoPreview.src = ev.target.result;
-                        };
-                        reader.readAsDataURL(file);
+            const selectedPhotoName = document.getElementById('selectedPhotoName');
+            const uploadPhotoBtn = document.getElementById('uploadPhotoBtn');
+            if (uploadPhotoBtn && photoInput) {
+                uploadPhotoBtn.onclick = function() {
+                    photoInput.click();
+                };
+                photoInput.onchange = function() {
+                    if (photoInput.files && photoInput.files.length > 0) {
+                        selectedPhotoName.textContent = photoInput.files[0].name;
                     } else {
-                        photoPreview.src = 'https://ui-avatars.com/api/?name=Employee&background=1976d2&color=fff';
+                        selectedPhotoName.textContent = '';
                     }
-                });
+                };
             }
-            // Close modal when clicking outside
+            // Employee Details Modal Event Listeners
+            const employeeDetailsModal = document.getElementById('employeeDetailsModal');
+            const closeEmployeeDetails = document.getElementById('closeEmployeeDetails');
+            const editEmployeeFromDetails = document.getElementById('editEmployeeFromDetails');
+            
+            if (closeEmployeeDetails && employeeDetailsModal) {
+                closeEmployeeDetails.onclick = function() {
+                    employeeDetailsModal.style.display = 'none';
+                };
+            }
+            
+            if (editEmployeeFromDetails) {
+                editEmployeeFromDetails.onclick = function() {
+                    const employeeId = this.getAttribute('data-employee-id');
+                    if (employeeId) {
+                        employeeDetailsModal.style.display = 'none';
+                        editEmployee(employeeId);
+                    }
+                };
+            }
+            
+            // Fire Employee Modal Event Listeners
+            const fireEmployeeModal = document.getElementById('fireEmployeeModal');
+            const closeFireEmployeeModal = document.getElementById('closeFireEmployeeModal');
+            const cancelFireEmployee = document.getElementById('cancelFireEmployee');
+            
+            if (closeFireEmployeeModal && fireEmployeeModal) {
+                closeFireEmployeeModal.onclick = function() {
+                    fireEmployeeModal.style.display = 'none';
+                };
+            }
+            
+            if (cancelFireEmployee && fireEmployeeModal) {
+                cancelFireEmployee.onclick = function() {
+                    fireEmployeeModal.style.display = 'none';
+                };
+            }
+            
+            // Handle fire employee form submission
+            const fireEmployeeForm = document.getElementById('fireEmployeeForm');
+            if (fireEmployeeForm) {
+                fireEmployeeForm.onsubmit = async function(e) {
+                    e.preventDefault();
+                    
+                    // Show loading state
+                    const loadingModal = document.getElementById('loadingModal');
+                    if (loadingModal) loadingModal.style.display = 'flex';
+                    
+                    try {
+                        const formData = new FormData(this);
+                        
+                        const response = await fetch('fire_employee.php', {
+                            method: 'POST',
+                            body: formData
+                        });
+                        
+                        const result = await response.json();
+                        
+                        if (result.success) {
+                            // Show success message
+                            alert(`Success! ${result.employee_name} has been terminated on ${result.date_fired}.`);
+                            
+                            // Close modal
+                            fireEmployeeModal.style.display = 'none';
+                            
+                            // Reload page to update employee list
+                            window.location.reload();
+                        } else {
+                            // Show error message
+                            alert('Error: ' + (result.error || 'Failed to terminate employee'));
+                        }
+                        
+                    } catch (error) {
+                        console.error('Error submitting form:', error);
+                        alert('An error occurred while processing the termination. Please try again.');
+                    } finally {
+                        // Hide loading modal
+                        if (loadingModal) loadingModal.style.display = 'none';
+                    }
+                };
+            }
+            
+            // Close modal when clicking outside (only for add employee modal)
             window.onclick = function(event) {
                 if (event.target === modal) {
                     modal.style.display = 'none';
                 }
+                // Removed outside click for employee details modal to prevent accidental closing
             }
         });
         </script>
     </div>
 </body>
-</html> 
+</html>

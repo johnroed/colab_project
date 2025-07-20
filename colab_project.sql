@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 19, 2025 at 07:38 PM
+-- Generation Time: Jul 20, 2025 at 07:37 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -129,6 +129,26 @@ CREATE TABLE `customers` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `fired_employees`
+--
+
+CREATE TABLE `fired_employees` (
+  `id` int(11) NOT NULL,
+  `employee_id` int(11) NOT NULL,
+  `first_name` varchar(100) NOT NULL,
+  `last_name` varchar(100) NOT NULL,
+  `department` varchar(100) DEFAULT NULL,
+  `job_title` varchar(100) DEFAULT NULL,
+  `date_hired` date DEFAULT NULL,
+  `date_fired` date NOT NULL,
+  `reason` text NOT NULL,
+  `fired_by` int(11) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `inventory_images`
 --
 
@@ -189,13 +209,6 @@ CREATE TABLE `login_approvals` (
   `expires_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `login_approvals`
---
-
-INSERT INTO `login_approvals` (`approval_id`, `user_id`, `token`, `status`, `created_at`, `expires_at`) VALUES
-(16, 1, '6bb9bfe78fdb951d21ff3a62f7ee9680be2bd18e48baf751000925c9b47b65db', 'approved', '2025-07-19 08:21:40', '2025-07-19 02:24:40');
-
 -- --------------------------------------------------------
 
 --
@@ -219,6 +232,15 @@ CREATE TABLE `payroll_employees` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `payroll_employees`
+--
+
+INSERT INTO `payroll_employees` (`id`, `first_name`, `last_name`, `department`, `job_title`, `email`, `phone_number`, `date_hired`, `status`, `photo_path`, `address`, `birthday`, `gender`, `created_at`, `updated_at`) VALUES
+(3, 'Julian Isiah', 'Belacse', 'PROGRAMMING Dep.', 'Senior High School English Teacher', 'julian.belacse@gmail.com', '0906-789-1234', '0000-00-00', 'active', 'uploads/emp_687c600cf38ea6.73323698.jpg', '45 Lakandula St., Barangay Sto. Niño, Mandaluyong City, Philippines', '1999-01-05', 'male', '2025-07-20 03:18:36', '2025-07-20 03:18:36'),
+(4, 'Jossalyn', 'Cortejos', 'Sleeping Dep.', 'Part-Time Printing Assistant', 'Jossalyncortejos16@gmail.com', '09854605780', '0000-00-00', 'active', 'uploads/emp_687c6e5cb3bd06.05889733.jpg', 'Brgy. 39- D, Purok 10 Washington StreetDavao City, Davao del Sur', '2005-09-16', 'female', '2025-07-20 04:19:40', '2025-07-20 04:19:40'),
+(5, 'Rose', 'Aronce', 'Human Resources', 'Administrative Assistant', 'rose.aronce20@gmail.com', '0928-765-4321', '2025-07-20', 'active', 'uploads/emp_687c7f5ac6f252.94183640.jpg', '89 Mabuhay Lane, Barangay San Roque, Cebu City, Philippines', '2000-08-22', 'female', '2025-07-20 05:32:10', '2025-07-20 05:32:10');
 
 -- --------------------------------------------------------
 
@@ -296,10 +318,8 @@ CREATE TABLE `user_login` (
 --
 
 INSERT INTO `user_login` (`user_id`, `email_address`, `password_secret`, `phone_number`, `phone_confirmed`, `two_step_on`, `date_joined`, `last_update`, `failed_attempts`, `last_failed_attempt`, `status`, `reset_code`, `reset_code_expiry`, `reset_code_used`, `job_title`) VALUES
-(1, 'johnroedlahaylahay2231@gmail.com', '$2y$10$kUrep2ZagwPcGibYskV2rusIxnq44KSn2nE5sca2hab.7yOvn6IKu', '09637330408', 1, 0, '2025-07-17 19:21:42', '2025-07-20 01:21:51', 1, '2025-07-19 16:27:34', 'active', NULL, NULL, 1, 'Executive'),
-(6, 'maria.garcia@email.com', '$2y$10$hkaad0ctdiunlVKz9VBf3urZ6KXGVgVYnK8TrZI.8VPJteNaV/Ulq', NULL, 0, 0, '2025-07-19 02:26:07', '2025-07-20 01:19:26', 0, NULL, 'active', NULL, NULL, 0, 'workers'),
-(7, 'mark.reyes@email.com', '$2y$10$QR7dEFHoK31lvF1YuYkjiuX7ON0kyzoAzwvwzVo/8FvQ6zY.cI5Vm', NULL, 0, 0, '2025-07-19 02:30:43', '2025-07-20 01:19:25', 0, NULL, 'active', NULL, NULL, 0, 'middle_manager'),
-(8, 'henricoresula27@gmail.com', '$2y$10$ea7GNVwIkx8DRk4PTkCBNe3OvuEnS8V4RILXBpp2FF7q6L1uZFpMm', NULL, 0, 0, '2025-07-19 21:21:47', '2025-07-20 01:19:25', 1, '2025-07-19 15:25:55', 'active', NULL, NULL, 0, 'workers');
+(9, 'johnroedlahaylahay2231@gmail.com', '$2y$10$BHNxOJM9E0PomwyTGN14Pu9Knc.qL9u7p4aTT4baxmYCG7snC6BUu', NULL, 0, 0, '2025-07-20 03:13:26', '2025-07-20 03:13:26', 0, NULL, 'active', NULL, NULL, 0, 'executives'),
+(10, 'Jossalyncortejos16@gmail.com', '$2y$10$Vt6VrMtYD34hNCzUs9ILVuZ7V3n/JDTWSYuMqjzJPm6rQ/V4FMvMO', NULL, 0, 0, '2025-07-20 12:22:39', '2025-07-20 12:22:53', 0, NULL, 'active', NULL, NULL, 0, 'senior_manager');
 
 --
 -- Indexes for dumped tables
@@ -333,6 +353,15 @@ ALTER TABLE `chart_of_accounts`
 --
 ALTER TABLE `customers`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `fired_employees`
+--
+ALTER TABLE `fired_employees`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `date_fired` (`date_fired`),
+  ADD KEY `fired_employees_ibfk_2` (`fired_by`),
+  ADD KEY `employee_id` (`employee_id`);
 
 --
 -- Indexes for table `inventory_images`
@@ -411,6 +440,12 @@ ALTER TABLE `customers`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `fired_employees`
+--
+ALTER TABLE `fired_employees`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT for table `inventory_images`
 --
 ALTER TABLE `inventory_images`
@@ -426,13 +461,13 @@ ALTER TABLE `inventory_items`
 -- AUTO_INCREMENT for table `login_approvals`
 --
 ALTER TABLE `login_approvals`
-  MODIFY `approval_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `approval_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `payroll_employees`
 --
 ALTER TABLE `payroll_employees`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `stock_movements`
@@ -450,7 +485,7 @@ ALTER TABLE `suppliers`
 -- AUTO_INCREMENT for table `user_login`
 --
 ALTER TABLE `user_login`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- Constraints for dumped tables
@@ -463,6 +498,12 @@ ALTER TABLE `bank_transactions`
   ADD CONSTRAINT `bank_transactions_ibfk_1` FOREIGN KEY (`bank_account_id`) REFERENCES `bank_accounts` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `bank_transactions_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user_login` (`user_id`) ON DELETE SET NULL,
   ADD CONSTRAINT `bank_transactions_ibfk_3` FOREIGN KEY (`related_transaction_id`) REFERENCES `bank_transactions` (`id`) ON DELETE SET NULL;
+
+--
+-- Constraints for table `fired_employees`
+--
+ALTER TABLE `fired_employees`
+  ADD CONSTRAINT `fired_employees_ibfk_2` FOREIGN KEY (`fired_by`) REFERENCES `user_login` (`user_id`) ON DELETE SET NULL;
 
 --
 -- Constraints for table `inventory_images`

@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $job_title = trim($_POST['job_title'] ?? '');
     $email = trim($_POST['email'] ?? '');
     $phone_number = trim($_POST['phone_number'] ?? '');
-    $date_hired = trim($_POST['date_hired'] ?? '');
+    $date_hired = date('Y-m-d'); // Set current date as hire date
     $status = trim($_POST['status'] ?? 'active');
     $address = trim($_POST['address'] ?? '');
     $birthday = trim($_POST['birthday'] ?? '');
