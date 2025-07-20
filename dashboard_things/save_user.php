@@ -1,4 +1,6 @@
 <?php
+require_once '../includes_files/auth_check.php';
+requireManagementAccess();
 include '../includes_files/connection.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (

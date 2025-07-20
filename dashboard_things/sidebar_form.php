@@ -1,5 +1,6 @@
 <?php
-session_start();
+require_once '../includes_files/auth_check.php';
+requireLogin();
 ?>
 <link rel="stylesheet" href="/colab_project/dashboard_things/sidebar_style.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">

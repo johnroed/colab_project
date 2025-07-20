@@ -1,4 +1,6 @@
 <?php
+require_once '../includes_files/auth_check.php';
+requireLogin();
 header('Content-Type: application/json');
 include '../includes_files/connection.php';
 

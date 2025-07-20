@@ -1,4 +1,8 @@
-<?php include 'sidebar_form.php'; ?>
+<?php 
+require_once '../includes_files/auth_check.php';
+requireLogin();
+include 'sidebar_form.php'; 
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

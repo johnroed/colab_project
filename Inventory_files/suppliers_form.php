@@ -1,5 +1,6 @@
 <?php
-session_start();
+require_once '../includes_files/auth_check.php';
+requireLogin();
 include '../dashboard_things/sidebar_form.php';
 include '../includes_files/connection.php';
 

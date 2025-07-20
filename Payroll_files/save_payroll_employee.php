@@ -1,4 +1,6 @@
 <?php
+require_once '../includes_files/auth_check.php';
+requireLogin();
 include '../includes_files/connection.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $first_name = trim($_POST['first_name'] ?? '');

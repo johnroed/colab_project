@@ -1,4 +1,6 @@
 <?php
+require_once '../includes_files/auth_check.php';
+requireLogin();
 include '../includes_files/connection.php';
 
 // Set content type to JSON for response

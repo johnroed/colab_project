@@ -1,4 +1,8 @@
-<?php include '../dashboard_things/sidebar_form.php'; ?>
+<?php 
+require_once '../includes_files/auth_check.php';
+requireLogin();
+include '../dashboard_things/sidebar_form.php'; 
+?>
 <?php
 include '../includes_files/connection.php';
 $items = [];

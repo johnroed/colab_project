@@ -1,4 +1,6 @@
 <?php
+require_once '../includes_files/auth_check.php';
+requireManagementAccess();
 include '../includes_files/connection.php';
 header('Content-Type: application/json');
 if (!isset($_POST['user_id'], $_POST['status'])) {
